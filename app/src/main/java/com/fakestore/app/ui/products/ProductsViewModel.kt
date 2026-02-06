@@ -1,0 +1,32 @@
+package com.fakestore.app.ui.products
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.fakestore.app.data.network.NetworkResult
+import com.fakestore.app.domain.model.Product
+import com.fakestore.app.domain.repo.ProductRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class ProductsViewModel @Inject constructor(var repo: ProductRepo): ViewModel() {
+
+    private var _state = MutableStateFlow<NetworkResult<List<Product>>>(NetworkResult.Loading())
+    val state : StateFlow<NetworkResult<List<Product>>> = _state
+
+    fun getProducts(){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val products = repo.getProducts()
+                _state.value = NetworkResult.Success(products)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+}
