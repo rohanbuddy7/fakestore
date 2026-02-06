@@ -1,6 +1,7 @@
 package com.fakestore.app.ui.products
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -73,7 +76,7 @@ fun ProductsScreen(
                         ProductList(
                             modifier = modifier,
                             onNavigate = { id ->
-                                onNavigate("detail/$id")
+                                onNavigate("productDetail/$id")
                             },
                             products = items
                         )
@@ -92,7 +95,7 @@ fun ProductsScreen(
                 is NetworkResult.Loading -> {
                     Text(
                         text = "Loading...",
-                        modifier = Modifier.padding(paddingValues)
+                        modifier = Modifier.fillMaxWidth().padding(paddingValues).wrapContentSize(Alignment.Center)
                     )
                 }
             }
@@ -171,81 +174,4 @@ fun ProductRow(
 
 
 
-//
-//@OptIn(ExperimentalLayoutApi::class)
-//@Composable
-//fun ProductDetailScreenUI(
-//    product: Product?,
-//    modifier: Modifier = Modifier
-//) {
-//    LazyColumn(
-//        modifier = modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp)
-//    ) {
-//
-//        // Image
-//        item {
-//            AsyncImage(
-//                model = product?.image,
-//                contentDescription = product?.title,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(280.dp),
-//                contentScale = ContentScale.Crop
-//            )
-//        }
-//
-//        // Title
-//        item {
-//            Text(
-//                text = product?.title ?: "No Title",
-//                style = MaterialTheme.typography.titleLarge,
-//                fontWeight = FontWeight.Bold
-//            )
-//        }
-//
-//        // Price + Rating
-//        item {
-//            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-//                Text("₹ ${product?.price ?: "--"}")
-//                Text("⭐ ${product?.rating?.rate ?: "--"} (${product?.rating?.count ?: 0})")
-//            }
-//        }
-//
-//        // Category (as a chip)
-//        item {
-//            if (!product?.category.isNullOrBlank()) {
-//                FlowRow(
-//                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-//                    verticalArrangement = Arrangement.spacedBy(8.dp)
-//                ) {
-//                    Card(onClick = {}) {
-//                        Text(
-//                            text = product!!.category,
-//                            modifier = Modifier.padding(10.dp)
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//
-//        // Description
-//        item {
-//            Text(
-//                text = "Description",
-//                style = MaterialTheme.typography.titleLarge,
-//                fontWeight = FontWeight.SemiBold
-//            )
-//            Spacer(Modifier.height(6.dp))
-//            Text(
-//                text = product?.description ?: "No Description Available",
-//                style = MaterialTheme.typography.bodyLarge
-//            )
-//        }
-//
-//        item { Spacer(Modifier.height(32.dp)) }
-//    }
-//}
-//
+

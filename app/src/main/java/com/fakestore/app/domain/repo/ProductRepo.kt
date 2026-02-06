@@ -11,4 +11,8 @@ class ProductRepo(
         return apiService.getProducts()
     }
 
+    suspend fun getProductDetail(id: Int): Product{
+        return apiService.getProductDetail(id)
+    }
+
 }

@@ -18,11 +18,27 @@ class ProductsViewModel @Inject constructor(var repo: ProductRepo): ViewModel() 
     private var _state = MutableStateFlow<NetworkResult<List<Product>>>(NetworkResult.Loading())
     val state : StateFlow<NetworkResult<List<Product>>> = _state
 
+
+    private var _detail = MutableStateFlow<NetworkResult<Product>>(NetworkResult.Loading())
+    val detail : StateFlow<NetworkResult<Product>> = _detail
+
+
     fun getProducts(){
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val products = repo.getProducts()
                 _state.value = NetworkResult.Success(products)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getProductDetail(id: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val detail = repo.getProductDetail(id)
+                _detail.value = NetworkResult.Success(detail)
             }catch (e: Exception){
                 e.printStackTrace()
             }
