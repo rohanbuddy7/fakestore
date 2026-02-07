@@ -50,6 +50,7 @@ fun ProductDetailScreen(
 
     LaunchedEffect(id) {
         vm.getProductDetail(id)
+        vm.observeCachedProductsById(id)
     }
 
     val state by vm.detail.collectAsStateWithLifecycle()
@@ -118,8 +119,7 @@ fun ProductDetailScreenUI(
                 model = product?.image,
                 contentDescription = product?.title,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(280.dp),
+                    .fillMaxWidth(),
                 contentScale = ContentScale.Crop
             )
         }

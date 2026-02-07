@@ -22,6 +22,9 @@ class ProductsViewModel @Inject constructor(var repo: ProductRepo): ViewModel() 
     private var _detail = MutableStateFlow<NetworkResult<Product>>(NetworkResult.Loading())
     val detail : StateFlow<NetworkResult<Product>> = _detail
 
+    init {
+        observeCachedProducts()
+    }
 
     fun getProducts(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -30,6 +33,9 @@ class ProductsViewModel @Inject constructor(var repo: ProductRepo): ViewModel() 
                 _state.value = NetworkResult.Success(products)
             }catch (e: Exception){
                 e.printStackTrace()
+                if(_state.value !is NetworkResult.Success){
+                    _state.value = NetworkResult.Error("Something went wrong")
+                }
             }
         }
     }
@@ -41,6 +47,30 @@ class ProductsViewModel @Inject constructor(var repo: ProductRepo): ViewModel() 
                 _detail.value = NetworkResult.Success(detail)
             }catch (e: Exception){
                 e.printStackTrace()
+                if(_detail.value !is NetworkResult.Success){
+                    _detail.value = NetworkResult.Error("Something went wrong")
+                }
+            }
+        }
+    }
+
+
+    private fun observeCachedProducts() {
+        viewModelScope.launch {
+            repo.observeProducts().collect { cachedProducts ->
+                if (cachedProducts.isNotEmpty()) {
+                    _state.value = NetworkResult.Success(cachedProducts)
+                }
+            }
+        }
+    }
+
+    fun observeCachedProductsById(id: Int) {
+        viewModelScope.launch {
+            repo.observeProductsById(id).collect { cachedProduct ->
+                if (cachedProduct != null) {
+                    _detail.value = NetworkResult.Success(cachedProduct)
+                }
             }
         }
     }
